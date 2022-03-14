@@ -1,0 +1,17 @@
+output2/
+SmallSample/output/
+SmallSample/*.log
+SmallSample/*.zip
+SmallSample/_MACOSX
+SmallSample/mesh
+UsualSample/_MACOSX
+UsualSample/output
+UsualSample/output1
+UsualSample/output2
+UsualSample/output3
+UsualSample/mesh
+UsualSample/*.log
+UsualSample/*.json
+UsualSample/*.txt
+SmallSample/*.txt
+SmallSample/*.json
