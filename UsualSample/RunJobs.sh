@@ -1,4 +1,7 @@
 # Batch job submission
+cd /home/shengduo/pylith-developer/build/debug/
+source setup.sh
+cd /home/shengduo/pylith-developer/build/debug/pylith-nonRegSlipLaw/examples/3d/Vito/VitoInput/UsualSample
 for drs in 8
 do
 	for load in 4.75
