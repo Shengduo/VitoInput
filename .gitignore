@@ -4,6 +4,7 @@ SmallSample/*.log
 SmallSample/*.zip
 SmallSample/_MACOSX
 UsualSample/_MACOSX
+UsualSample/log/*.log
 UsualSample/output
 UsualSample/output1
 UsualSample/output2
