@@ -9,7 +9,7 @@ class FileModifier(object):
         # Change initial theta
         list_of_lines[204] = "friction.db_initial_state.data = [" + str(theta) + "*s]\n"
         # Change output file name
-        list_of_lines[257] = "writer.filename = output/dumpFiles/" + fileNamePrefix + "-domain.h5"
+        list_of_lines[257] = "writer.filename = output/dumpFiles/" + fileNamePrefix + "-domain.h5\n"
         list_of_lines[272] = "writer.filename = output/frontsurfFiles/" + fileNamePrefix + "-frontsurf.h5\n"
         list_of_lines[285] = "writer.filename = output/faultFiles/" + fileNamePrefix + "-fault.h5\n"
         list_of_lines[297] = "writer.filename = output/dumpFiles/" + fileNamePrefix + "-upper_crust.h5\n"

@@ -10,7 +10,7 @@ do
 		do
 			for fw in 0.1
 			do
-				for theta in 8e-2 9e-2
+				for theta in 9e-2
 				do
 					for A in 0.020
 					do
