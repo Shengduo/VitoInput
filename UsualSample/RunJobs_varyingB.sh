@@ -1,7 +1,7 @@
 # A bunch of jobs submission
 cd /home/shengduo/pylith-developer/build/debug/
 source setup.sh
-cd /home/shengduo/pylith-developer/build/debug/pylith-nonRegSlipLaw/examples/3d/Vito/VitoInput/UsualSample
+cd -
 for drs in 8
 do
 	for load in 4.75
@@ -20,7 +20,7 @@ do
 							do
 								for Vw1 in 0.1
 								do
-									for b_final in 0.016
+									for b_final in 0.016 0.024
 									do
 										for b_distance in 2e-6
 										do
