@@ -1,9 +1,9 @@
 import fire
 class FileModifier(object):
     """ Modifies the file for further simulation """
-    def modifyFiles(self, DRS, Load, Vw1, Vw2, Vw3, fw2, fw3, theta, A, b_initial, b_final, b_distance):
+    def modifyFiles(self, DRS, Load, Vw1, Vw2, Vw3, fw2, fw3, theta, A, b_initial, b_final2, b_final3, b_distance):
         ## Main CFG file
-        fileNamePrefix = "VaryingB_DRS1_" + str(DRS) + "A" + str(A) + "B" + str(b_initial) + "_" + str(b_final) + "_" + str(b_distance) + "Load" + str(Load) + "_Vw" + str(Vw1) + "_" + str(Vw2) + "_" + str(Vw3) + "_fw" + str(fw2) + "_" + str(fw3) + "_theta" + str(theta)
+        fileNamePrefix = "VaryingB_DRS1_" + str(DRS) + "A" + str(A) + "B" + str(b_initial) + "_" + str(b_final2) + "_" + str(b_final3) + "_" + str(b_distance) + "Load" + str(Load) + "_Vw" + str(Vw1) + "_" + str(Vw2) + "_" + str(Vw3) + "_fw" + str(fw2) + "_" + str(fw3) + "_theta" + str(theta)
         mainCFGr = open("UsualSampleVaryingBVSFH.cfg", 'r')
         list_of_lines = mainCFGr.readlines()
         # Change initial theta
@@ -46,15 +46,15 @@ class FileModifier(object):
         list_of_lines[37] = " 0.005480  0.003037 -0.005000     0.58  1e-6   1e-6  0.011  0.016  0.016  2e-6  0.0  0.3  " + str(Vw1) + "\n"
         list_of_lines[38] = " 0.005480  0.003037  0.005000     0.58  1e-6   1e-6  0.011  0.016  0.016  2e-6  0.0  0.3  " + str(Vw1) + "\n"
 
-        list_of_lines[40] = " 0.006354 0.003522 -0.005000     0.58  1e-6   " + "1e-6" + "  " + "0.011  " + str(b_initial) + "  " + str(b_final) + "  "  + str(b_distance) + " 0.0  " + str(fw2) + "  " + str(Vw2) + "\n"
-        list_of_lines[41] = " 0.006354 0.003522  0.005000     0.58  1e-6   " + "1e-6" + "  " + "0.011  " + str(b_initial) + "  " + str(b_final) + "  "  + str(b_distance) + " 0.0  " + str(fw2) + "  " + str(Vw2) + "\n"
-        list_of_lines[43] = " 0.019473 0.010794 -0.005000     0.58  1e-6   " + "1e-6" + "  " + "0.011  " + str(b_initial) + "  " + str(b_final) + "  "  + str(b_distance) + " 0.0  " + str(fw2) + "  " + str(Vw2) + "\n"
-        list_of_lines[44] = " 0.019473 0.010794  0.005000     0.58  1e-6   " + "1e-6" + "  " + "0.011  " + str(b_initial) + "  " + str(b_final) + "  "  + str(b_distance) + " 0.0  " + str(fw2) + "  " + str(Vw2) + "\n"
+        list_of_lines[40] = " 0.006354 0.003522 -0.005000     0.58  1e-6   " + "1e-6" + "  " + "0.011  " + str(b_initial) + "  " + str(b_final2) + "  "  + str(b_distance) + " 0.0  " + str(fw2) + "  " + str(Vw2) + "\n"
+        list_of_lines[41] = " 0.006354 0.003522  0.005000     0.58  1e-6   " + "1e-6" + "  " + "0.011  " + str(b_initial) + "  " + str(b_final2) + "  "  + str(b_distance) + " 0.0  " + str(fw2) + "  " + str(Vw2) + "\n"
+        list_of_lines[43] = " 0.019473 0.010794 -0.005000     0.58  1e-6   " + "1e-6" + "  " + "0.011  " + str(b_initial) + "  " + str(b_final2) + "  "  + str(b_distance) + " 0.0  " + str(fw2) + "  " + str(Vw2) + "\n"
+        list_of_lines[44] = " 0.019473 0.010794  0.005000     0.58  1e-6   " + "1e-6" + "  " + "0.011  " + str(b_initial) + "  " + str(b_final2) + "  "  + str(b_distance) + " 0.0  " + str(fw2) + "  " + str(Vw2) + "\n"
 
-        list_of_lines[46] = " 0.021223 0.011764 -0.005000     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.011  0.011  2e-6  0.0  " + str(fw3) + "  " + str(Vw3) + "\n"
-        list_of_lines[47] = " 0.021223 0.011764  0.005000     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.011  0.011  2e-6  0.0  " + str(fw3) + "  " + str(Vw3) + "\n"
-        list_of_lines[49] = " 0.058832 0.032610 -0.005000     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.011  0.011  2e-6  0.0  " + str(fw3) + "  " + str(Vw3) + "\n"
-        list_of_lines[50] = " 0.058832 0.032610  0.005000     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.011  0.011  2e-6  0.0  " + str(fw3) + "  " + str(Vw3) + "\n"
+        list_of_lines[46] = " 0.021223 0.011764 -0.005000     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.016  " + str(b_final3) + "  "  + str(b_distance) + "  0.0  " + str(fw3) + "  " + str(Vw3) + "\n"
+        list_of_lines[47] = " 0.021223 0.011764  0.005000     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.016  " + str(b_final3) + "  "  + str(b_distance) + "  0.0  " + str(fw3) + "  " + str(Vw3) + "\n"
+        list_of_lines[49] = " 0.058832 0.032610 -0.005000     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.016  " + str(b_final3) + "  "  + str(b_distance) + "  0.0  " + str(fw3) + "  " + str(Vw3) + "\n"
+        list_of_lines[50] = " 0.058832 0.032610  0.005000     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.016  " + str(b_final3) + "  "  + str(b_distance) + "  0.0  " + str(fw3) + "  " + str(Vw3) + "\n"
 
         list_of_lines[52] = "0.059706 0.033095 -0.005000     0.58  1e-6   1e-6  0.011  0.016  0.016 2e-6 0.0  0.3  " + str(Vw1) + "\n"
         list_of_lines[53] = "0.059706 0.033095  0.005000     0.58  1e-6   1e-6  0.011  0.016  0.016 2e-6 0.0  0.3  " + str(Vw1) + "\n"
