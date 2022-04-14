@@ -13,11 +13,11 @@ do
 			do
 				for theta1 in 0.036
 				do
-					for theta2 in 8
+					for theta2 in 0.08 8
 					do
 						for A in 0.016
 						do	
-							for NULoad in 1
+							for NULoad in -1 -2
 							do
 								fileNamePrefix=DiffNULoadWithWallDRS1.5_${drs}ModA_${A}Load${Load}_Vw${Vw}_fw${fw}_theta${theta1}_${theta2}_NULoad2dir${NULoad}
 								python3 createInputs_withWall.py modifyFiles_GougeDifferentLoad --DRS=$drs --Load=$load --Vw=$Vw --fw=$fw --theta1=$theta1 --theta2=$theta2 --A=$A --NULoad=$NULoad
