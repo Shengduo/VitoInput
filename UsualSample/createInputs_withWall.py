@@ -2,16 +2,16 @@ import fire
 class FileModifier(object):
     # Define the size of wall
     WallPos1 = " -0.005000"
-    WallPos2 = " -0.004000"
-    WallPos3 = " -0.003800"
-    WallPos4 = "  0.003800"
-    WallPos5 = "  0.004000"
+    WallPos2 = " -0.004100"
+    WallPos3 = " -0.003900"
+    WallPos4 = "  0.004300"
+    WallPos5 = "  0.004500"
     WallPos6 = "  0.005000"
 
     """ Modifies the file for further simulation """
     def modifyFiles(self, DRS, Load, Vw, fw, theta1, theta2, A, NULoad):
         ## Main CFG file
-        fileNamePrefix = "WithWallDRS1.5_" + str(DRS) + "ModA" + str(A) + "Load" + str(Load) + "_Vw" + str(Vw) + "_fw" + str(fw) + "_theta" + str(theta1) + "_" + str(theta2) + "_NULoad2dir" + str(NULoad)
+        fileNamePrefix = "1WithWallDRS1.5_" + str(DRS) + "ModA" + str(A) + "Load" + str(Load) + "_Vw" + str(Vw) + "_fw" + str(fw) + "_theta" + str(theta1) + "_" + str(theta2) + "_NULoad2dir" + str(NULoad)
         mainCFGr = open("UsualSampleVSFH_withWall.cfg", 'r')
         list_of_lines = mainCFGr.readlines()
 
@@ -48,8 +48,8 @@ class FileModifier(object):
         
         list_of_lines[50] = " 0.006354  0.003522 -0.003800     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.003  0.0  " + str(fw) + "  " + str(Vw) + "\n"
         list_of_lines[51] = " 0.006354  0.003522  0.003800     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.003  0.0  " + str(fw) + "  " + str(Vw) + "\n"
-        list_of_lines[59] = " 0.058832  0.032610 -0.003800     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.003  0.0  " + str(fw) + "  " + str(Vw) + "\n"
-        list_of_lines[60] = " 0.058832  0.032610  0.003800     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.003  0.0  " + str(fw) + "  " + str(Vw) + "\n"
+        list_of_lines[59] = " 0.063204  0.035034 -0.003800     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.003  0.0  " + str(fw) + "  " + str(Vw) + "\n"
+        list_of_lines[60] = " 0.063204  0.035034  0.003800     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.003  0.0  " + str(fw) + "  " + str(Vw) + "\n"
         
         # Modify the locations
         Wallposition = [self.WallPos3, self.WallPos4, self.WallPos2, self.WallPos5, self.WallPos1, self.WallPos6]
@@ -85,8 +85,8 @@ class FileModifier(object):
         list_of_lines[71] =  " 0.021223  0.011764 -0.003800     " + str(-NULoad * 0.554309051452769 / 3.) + "  0.0  " + str(-NULoad / 3.) + "\n"
         list_of_lines[72] =  " 0.021223  0.011764  0.003800     " + str(-NULoad * 0.554309051452769 / 3.) + "  0.0  " + str(-NULoad / 3.) + "\n"
         
-        list_of_lines[80] =  " 0.058832  0.032610 -0.003800     " + str(-NULoad * 0.554309051452769 / 3.) + "  0.0  " + str(-NULoad / 3.) + "\n"
-        list_of_lines[81] =  " 0.058832  0.032610  0.003800     " + str(-NULoad * 0.554309051452769 / 3.) + "  0.0  " + str(-NULoad / 3.) + "\n"
+        list_of_lines[80] =  " 0.063204  0.035034 -0.003800     " + str(-NULoad * 0.554309051452769 / 3.) + "  0.0  " + str(-NULoad / 3.) + "\n"
+        list_of_lines[81] =  " 0.063204  0.035034  0.003800     " + str(-NULoad * 0.554309051452769 / 3.) + "  0.0  " + str(-NULoad / 3.) + "\n"
 
         # Modify the locations
         Wallposition = [self.WallPos1, self.WallPos6, self.WallPos2, self.WallPos5, self.WallPos3, self.WallPos4]
@@ -118,8 +118,8 @@ class FileModifier(object):
         # Change somelines into theta1, some into theta2
         set_of_theta2_lines = [" 0.006354  0.003522" + self.WallPos3, 
                                " 0.006354  0.003522" + self.WallPos4, 
-                               " 0.058832  0.032610" + self.WallPos3, 
-                               " 0.058832  0.032610" + self.WallPos4]
+                               " 0.063204  0.035034" + self.WallPos3, 
+                               " 0.063204  0.035034" + self.WallPos4]
         for index in range(27, 80):
             if len(list_of_lines[index]) > 29:
                 if list_of_lines[index][0:29] in set_of_theta2_lines:
@@ -138,7 +138,7 @@ class FileModifier(object):
         
 
         ## Main CFG file
-        fileNamePrefix = "DiffNULoadWithWallDRS1.5_" + str(DRS) + "ModA" + str(A) + "Load" + str(Load) + "_Vw" + str(Vw) + "_fw" + str(fw) + "_theta" + str(theta1) + "_" + str(theta2) + "_NULoad2dir" + str(NULoad)
+        fileNamePrefix = "1DiffNULoadWithWallDRS1.5_" + str(DRS) + "ModA" + str(A) + "Load" + str(Load) + "_Vw" + str(Vw) + "_fw" + str(fw) + "_theta" + str(theta1) + "_" + str(theta2) + "_NULoad2dir" + str(NULoad)
         mainCFGr = open("UsualSampleVSFH_withWall.cfg", 'r')
         list_of_lines = mainCFGr.readlines()
 
@@ -175,8 +175,8 @@ class FileModifier(object):
 
         list_of_lines[50] = " 0.006354  0.003522 -0.003800     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.003  0.0  " + str(fw) + "  " + str(Vw) + "\n"
         list_of_lines[51] = " 0.006354  0.003522  0.003800     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.003  0.0  " + str(fw) + "  " + str(Vw) + "\n"
-        list_of_lines[59] = " 0.058832  0.032610 -0.003800     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.003  0.0  " + str(fw) + "  " + str(Vw) + "\n"
-        list_of_lines[60] = " 0.058832  0.032610  0.003800     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.003  0.0  " + str(fw) + "  " + str(Vw) + "\n"
+        list_of_lines[59] = " 0.063204  0.035034 -0.003800     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.003  0.0  " + str(fw) + "  " + str(Vw) + "\n"
+        list_of_lines[60] = " 0.063204  0.035034  0.003800     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.003  0.0  " + str(fw) + "  " + str(Vw) + "\n"
 
         # Modify the locations
         Wallposition = [self.WallPos3, self.WallPos4, self.WallPos2, self.WallPos5, self.WallPos1, self.WallPos6]
@@ -195,8 +195,8 @@ class FileModifier(object):
         NULoadCFGr = open("spatialdb/prescribed_traction_initial_withWall.spatialdb", 'r')
         set_of_NULoad_lines = [" 0.006354  0.003522" + self.WallPos3, 
                                " 0.006354  0.003522" + self.WallPos4, 
-                               " 0.058832  0.032610" + self.WallPos3, 
-                               " 0.058832  0.032610" + self.WallPos4, 
+                               " 0.063204  0.035034" + self.WallPos3, 
+                               " 0.063204  0.035034" + self.WallPos4, 
                                " 0.019473  0.010794" + self.WallPos3, 
                                " 0.019473  0.010794" + self.WallPos4, 
                                " 0.021223  0.011764" + self.WallPos3, 
@@ -242,8 +242,8 @@ class FileModifier(object):
         # Change somelines into theta1, some into theta2
         set_of_theta2_lines = [" 0.006354  0.003522" + self.WallPos3, 
                                " 0.006354  0.003522" + self.WallPos4, 
-                               " 0.058832  0.032610" + self.WallPos3, 
-                               " 0.058832  0.032610" + self.WallPos4]
+                               " 0.063204  0.035034" + self.WallPos3, 
+                               " 0.063204  0.035034" + self.WallPos4]
         
         for index in range(27, 80):
             if len(list_of_lines[index]) > 29:
