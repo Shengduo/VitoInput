@@ -1,4 +1,5 @@
 import fire
+import math
 class FileModifier(object):
     # Define the size of wall
     WallPos1 = " -0.005000"
@@ -9,11 +10,26 @@ class FileModifier(object):
     WallPos6 = "  0.005000"
 
     """ Modifies the file for further simulation """
-    def modifyFiles(self, DRS, Load, Vw, fw, theta1, theta2, A, NULoad):
+    def modifyFiles(self, DRS, Load, Vw, fw, theta1, theta2, A, AmB, NULoad):
         ## Main CFG file
-        fileNamePrefix = "1WithWallDRS1.5_" + str(DRS) + "ModA" + str(A) + "Load" + str(Load) + "_Vw" + str(Vw) + "_fw" + str(fw) + "_theta" + str(theta1) + "_" + str(theta2) + "_NULoad2dir" + str(NULoad)
+        fileNamePrefix = "1WithWallDRS1.5_" + str(DRS) + "ModA" + str(A) + "AmB" + str(AmB) + "Load" + str(Load) + "_Vw" + str(Vw) + "_fw" + str(fw) + "_theta" + str(theta1) + "_" + str(theta2) + "_NULoad2dir" + str(NULoad)
         mainCFGr = open("UsualSampleVSFH_withWall.cfg", 'r')
         list_of_lines = mainCFGr.readlines()
+        
+        # First deal with theta2, assuming alpha = 29 \deg, tan(alpha) = 0.554309051452769, f_* = 0.58, linear slip rate = 1e-9
+        B = A - AmB
+        if theta2 < 0.0:
+            # Apply V_ini = 10^{\theta_2};
+            f = math.tan(29 / 180 * math.pi)
+            Vlin = 1.0e-9
+            Vini = 10.0**theta2
+            if theta2 < - 9:
+                temp = f - 0.58 - A * math.log(Vlin / 1e-6) + A * (1 - Vini / Vlin)
+                theta2 = math.exp(temp / B) * DRS / 1e-6 
+            else:
+                temp = f - 0.58 - A * math.log(Vini / 1e-6)
+                theta2 = math.exp(temp / B) * DRS / 1e-6 
+        print("theta2 =", theta2)
 
         # Change output file name
         list_of_lines[262] = "writer.filename = output/dumpFiles/" + fileNamePrefix + "-domain.h5\n"
@@ -46,10 +62,10 @@ class FileModifier(object):
         fricDBr = open("spatialdb/rateStateProps_withWall.spatialdb", 'r')
         list_of_lines = fricDBr.readlines()
         
-        list_of_lines[50] = " 0.006354  0.003522 -0.003800     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.003  0.0  " + str(fw) + "  " + str(Vw) + "\n"
-        list_of_lines[51] = " 0.006354  0.003522  0.003800     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.003  0.0  " + str(fw) + "  " + str(Vw) + "\n"
-        list_of_lines[59] = " 0.063204  0.035034 -0.003800     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.003  0.0  " + str(fw) + "  " + str(Vw) + "\n"
-        list_of_lines[60] = " 0.063204  0.035034  0.003800     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  0.003  0.0  " + str(fw) + "  " + str(Vw) + "\n"
+        list_of_lines[50] = " 0.006354  0.003522 -0.003800     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  " + str(B) + "  0.0  " + str(fw) + "  " + str(Vw) + "\n"
+        list_of_lines[51] = " 0.006354  0.003522  0.003800     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  " + str(B) + "  0.0  " + str(fw) + "  " + str(Vw) + "\n"
+        list_of_lines[59] = " 0.063204  0.035034 -0.003800     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  " + str(B) + "  0.0  " + str(fw) + "  " + str(Vw) + "\n"
+        list_of_lines[60] = " 0.063204  0.035034  0.003800     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  " + str(B) + "  0.0  " + str(fw) + "  " + str(Vw) + "\n"
         
         # Modify the locations
         Wallposition = [self.WallPos3, self.WallPos4, self.WallPos2, self.WallPos5, self.WallPos1, self.WallPos6]
