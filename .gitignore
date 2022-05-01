@@ -11,6 +11,7 @@ UsualSample/output2
 UsualSample/output3
 UsualSample/*.log
 UsualSample/*.json
+UsualSample/mesh/
 UsualSample/*.txt
 SmallSample/*.txt
 SmallSample/*.json
