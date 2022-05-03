@@ -10,9 +10,37 @@ class FileModifier(object):
     WallPos6 = "  0.005000"
 
     """ Modifies the file for further simulation """
-    def modifyFiles(self, DRS, Load, Vw, fw, theta1, theta2, A, AmB, NULoad):
+    def modifyFiles(self, DRS, Load, Vw, fw, theta1, theta2, A, AmB, NULoad, meshFineness):
+        ## If meshFineness is 2
+        if meshFineness == 2:
+            backgroundCFGr = open("pylithapp.cfg", 'r')
+            list_of_lines = backgroundCFGr.readlines()
+
+            # Change the input mesh file to the finer one
+            list_of_lines[46] = "filename = mesh/finer_tet.exo\n"
+            backgroundCFGw = open("pylithapp.cfg", 'w')
+            backgroundCFGw.writelines(list_of_lines)
+
+            # close files
+            backgroundCFGr.close()
+            backgroundCFGw.close()
+        
+        else:
+            backgroundCFGr = open("pylithapp.cfg", 'r')
+            list_of_lines = backgroundCFGr.readlines()
+
+            # Change the input mesh file to the finer one
+            list_of_lines[46] = "filename = mesh/myGeometryTetFiner.exo\n"
+            backgroundCFGw = open("pylithapp.cfg", 'w')
+            backgroundCFGw.writelines(list_of_lines)
+
+            # close files
+            backgroundCFGr.close()
+            backgroundCFGw.close()
+
+
         ## Main CFG file
-        fileNamePrefix = "1WithWallDRS1.5_" + str(DRS) + "ModA" + str(A) + "AmB" + str(AmB) + "Load" + str(Load) + "_Vw" + str(Vw) + "_fw" + str(fw) + "_theta" + str(theta1) + "_" + str(theta2) + "_NULoad2dir" + str(NULoad)
+        fileNamePrefix = str(meshFineness) + "WithWallDRS1.5_" + str(DRS) + "ModA" + str(A) + "AmB" + str(AmB) + "Load" + str(Load) + "_Vw" + str(Vw) + "_fw" + str(fw) + "_theta" + str(theta1) + "_" + str(theta2) + "_NULoad2dir" + str(NULoad)
         mainCFGr = open("UsualSampleVSFH_withWall.cfg", 'r')
         list_of_lines = mainCFGr.readlines()
         

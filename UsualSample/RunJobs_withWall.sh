@@ -19,14 +19,28 @@ do
 						do	
 							for AmB in 0.005
 							do
+								if [[ $(echo "$A<=$AmB" |bc -l) -eq 1 ]]; then
+									echo "Shit!"
+									continue
+								fi
 								for NULoad in 0
 								do
-									fileNamePrefix=1WithWallDRS1.5_${drs}ModA_${A}_AmB${AmB}_Load${Load}_Vw${Vw}_fw${fw}_theta${theta1}_${theta2}_NULoad2dir${NULoad}
-									python3 createInputs_withWall.py modifyFiles --DRS=$drs --Load=$load --Vw=$Vw --fw=$fw --theta1=$theta1 --theta2=$theta2 --A=$A --AmB=$AmB --NULoad=$NULoad
-									echo "Running case ${fileNamePrefix}"
-									pylith --nodes=16 UsualSampleVSFH_withWall.cfg >& log/${fileNamePrefix}.log
-									echo "Finished!"
-									echo
+									for meshFineness in 2
+									do
+										# Start the timer
+										start_time=$(date +%s)
+										
+										fileNamePrefix=${meshFineness}WithWallDRS1.5_${drs}ModA_${A}_AmB${AmB}_Load${Load}_Vw${Vw}_fw${fw}_theta${theta1}_${theta2}_NULoad2dir${NULoad}
+										python3 createInputs_withWall.py modifyFiles --DRS=$drs --Load=$load --Vw=$Vw --fw=$fw --theta1=$theta1 --theta2=$theta2 --A=$A --AmB=$AmB --NULoad=$NULoad --meshFineness=$meshFineness
+										echo "Running case ${fileNamePrefix}"
+										pylith --nodes=16 UsualSampleVSFH_withWall.cfg >& log/${fileNamePrefix}.log
+
+										# End the timer, report time
+										end_time=$(date +%s)
+										elapsed=$(( end_time - start_time ))
+										echo "Finished in ${elapsed} s!"
+										echo
+									done
 								done
 							done
 						done
