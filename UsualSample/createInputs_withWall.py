@@ -25,6 +25,19 @@ class FileModifier(object):
             backgroundCFGr.close()
             backgroundCFGw.close()
         
+        elif meshFineness == 3:
+            backgroundCFGr = open("pylithapp.cfg", 'r')
+            list_of_lines = backgroundCFGr.readlines()
+
+            # Change the input mesh file to the finer one
+            list_of_lines[46] = "filename = mesh/finer_tet3.exo\n"
+            backgroundCFGw = open("pylithapp.cfg", 'w')
+            backgroundCFGw.writelines(list_of_lines)
+
+            # close files
+            backgroundCFGr.close()
+            backgroundCFGw.close()
+
         else:
             backgroundCFGr = open("pylithapp.cfg", 'r')
             list_of_lines = backgroundCFGr.readlines()

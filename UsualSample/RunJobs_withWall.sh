@@ -1,3 +1,4 @@
+
 # Batch job submission
 #cd /home/shengduo/pylith-developer/build/debug/
 #source setup.sh
@@ -13,7 +14,7 @@ do
 			do
 				for theta1 in 0.036
 				do
-					for theta2 in -11 -10
+					for theta2 in -10
 					do
 						for A in 0.008
 						do	
@@ -25,7 +26,7 @@ do
 								fi
 								for NULoad in 0
 								do
-									for meshFineness in 2
+									for meshFineness in 3
 									do
 										# Start the timer
 										start_time=$(date +%s)
