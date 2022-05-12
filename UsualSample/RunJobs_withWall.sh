@@ -14,7 +14,7 @@ do
 			do
 				for theta1 in 0.036
 				do
-					for theta2 in -10
+					for theta2 in -11 -10
 					do
 						for A in 0.008
 						do	
