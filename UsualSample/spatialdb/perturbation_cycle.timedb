@@ -8,14 +8,17 @@
 //
 #TIME HISTORY ascii
 TimeHistory {
-  num-points = 8 // number of points in time history
+  num-points = 6 // number of points in time history
   time-units = s // units for time
 }
 0.0e-4 0.0
-0.08e-4 0.0
-0.1e-4 0.5
-0.14e-4 0.5
-0.16e-4 0.0
-1.0e-4 0.0
-3.0e-4 0.0
-1.0e-2 0.0
+8e-06  0.0
+1e-05  0.5
+1.8e-05  0.5
+2.0e-05  0.0
+0.000208  0.0
+
+// 9e-06  0.0
+// 1e-05  0.5
+// 3.0000000000000004e-05  0.5
+// 3.1e-05  0.0

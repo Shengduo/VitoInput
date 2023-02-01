@@ -5,9 +5,9 @@
 //
 #SPATIAL.ascii 1
 SimpleDB {
-  num-values = 6 // number of material property values
-  value-names =  shear-ratio-1  shear-ratio-2  shear-ratio-3  viscosity-1  viscosity-2  viscosity-3 // names of the material property values
-  value-units =  none  none  none  MPa*s  MPa*s  MPa*s
+  num-values = 1 // number of material property values
+  value-names =  viscosity // names of the material property values
+  value-units =  Pa*s
   num-locs = 1 // number of locations
   data-dim = 0
   space-dim = 3
@@ -20,10 +20,5 @@ SimpleDB {
 // (1) x coordinate (m)
 // (2) y coordinate (m)
 // (3) z coordinate (m)
-// (4) shear-ratio-1
-// (5) shear-ratio-2
-// (6) shear-ratio-3
-// (7) viscosity-1 (MPa*s)
-// (8) viscosity-2 (MPa*s)
-// (9) viscosity-3 (MPa*s)
-0.0  0.0  0.0   0.4  0.4  0.19999  7.10046e+18 7.10046e+19 7.10046e+20
+// (4) viscosity
+0.0  0.0  0.0   1.0e3

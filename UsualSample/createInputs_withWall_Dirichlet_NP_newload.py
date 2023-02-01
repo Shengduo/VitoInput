@@ -13,7 +13,7 @@ class FileModifier(object):
     WallPos6 = "  0.005000"
 
     """ Modifies the file for further simulation """
-    def modifyFiles(self, DRS, Load, Vw, fw, theta1, theta2, A, AmB, NULoad, meshFineness, duration):
+    def modifyFiles(self, DRS, Load, Vw, fw, theta1, theta2, A, AmB, NULoad, meshFineness, duration, rest, NPOP):
         ## If meshFineness is 2
         if meshFineness == 2:
             backgroundCFGr = open("pylithapp.cfg", 'r')
@@ -56,7 +56,14 @@ class FileModifier(object):
 
 
         ## Main CFG file
-        fileNamePrefix = str(meshFineness) + "NPDirWithWallDRS1.5_" + str(DRS) + "ModA" + str(A) + "AmB" + str(AmB) + "Load" + str(Load) + "_Vw" + str(Vw) + "_fw" + str(fw) + "_theta" + str(theta1) + "_" + str(theta2) + "_NULoad2dir" + str(NULoad) + "_duration" + str(duration)
+        ## Modify rateStateProps
+        if NPOP == 0:
+            # fileNamePrefix = "GougeThick" + str(meshFineness) + "OPDirWithWallDRS1.5_" + str(DRS) + "ModA" + str(A) + "AmB" + str(AmB) + "Load" + str(Load) + "_Vw" + str(Vw) + "_fw" + str(fw) + "_theta" + str(theta1) + "_" + str(theta2) + "_NULoad2dir" + str(NULoad) + "_duration" + str(duration) + "_" + str(rest)
+            fileNamePrefix = "W8_4ExcCorr" + str(meshFineness) + "OPDirWithWallDRS1.5_" + str(DRS) + "ModA" + str(A) + "AmB" + str(AmB) + "Load" + str(Load) + "_Vw" + str(Vw) + "_fw" + str(fw) + "_theta" + str(theta1) + "_" + str(theta2) + "_NULoad2dir" + str(NULoad) + "_duration" + str(duration) + "_" + str(rest)
+        elif NPOP == 1:
+            # fileNamePrefix = "GougeThick" + str(meshFineness) + "NPDirWithWallDRS1.5_" + str(DRS) + "ModA" + str(A) + "AmB" + str(AmB) + "Load" + str(Load) + "_Vw" + str(Vw) + "_fw" + str(fw) + "_theta" + str(theta1) + "_" + str(theta2) + "_NULoad2dir" + str(NULoad) + "_duration" + str(duration) + "_" + str(rest)
+            fileNamePrefix = "W8_4ExcCorr" + str(meshFineness) + "NPDirWithWallDRS1.5_" + str(DRS) + "ModA" + str(A) + "AmB" + str(AmB) + "Load" + str(Load) + "_Vw" + str(Vw) + "_fw" + str(fw) + "_theta" + str(theta1) + "_" + str(theta2) + "_NULoad2dir" + str(NULoad) + "_duration" + str(duration) + "_" + str(rest)
+        
         mainCFGr = open("UsualSampleVSFH_withWall_Dirichlet.cfg", 'r')
         list_of_lines = mainCFGr.readlines()
         
@@ -66,20 +73,25 @@ class FileModifier(object):
             # Apply V_ini = 10^{\theta_2};
             f = math.tan(29 / 180 * math.pi)
             Vlin = 1.0e-9
-            Vini = 10.0**theta2
+            # Vini = 10.0**theta2 * math.exp(-0.006 / 0.011 * 6 * math.log(10.))
+            Vini = 10.0 ** theta2
             if theta2 < - 9:
                 temp = f - 0.58 - A * math.log(Vlin / 1e-6) + A * (1 - Vini / Vlin)
-                theta2 = math.exp(temp / B) * DRS / 1e-6 
+                theta2 = math.exp(temp / B) * (DRS * 1e-6) / 1e-6
             else:
                 temp = f - 0.58 - A * math.log(Vini / 1e-6)
-                theta2 = math.exp(temp / B) * DRS / 1e-6 
-        print("theta2 =", theta2)
+                theta2 = math.exp(temp / B) * (DRS * 1e-6) / 1e-6
+            print("Vini = ", Vini)
+        print("theta2 = ", theta2)
 
         # Change friction file
-        list_of_lines[197] = "friction.db_properties.iohandler.filename = spatialdb/rateStateProps_withWall_NP.spatialdb\n"
+        if NPOP == 0:
+            list_of_lines[197] = "friction.db_properties.iohandler.filename = spatialdb/rateStateProps_withWall.spatialdb\n"
+        elif NPOP == 1:
+            list_of_lines[197] = "friction.db_properties.iohandler.filename = spatialdb/rateStateProps_withWall_3_8.spatialdb\n"
         
         # Change the duration of simulation time
-        list_of_lines[77] = "total_time = " + str(duration / 1.0e6) + "*s\n"
+        list_of_lines[77] = "total_time = " + str((duration + rest)/ 1.0e6) + "*s\n"
         # Change output file name
         list_of_lines[262] = "writer.filename = output/dumpFiles/" + fileNamePrefix + "-domain.h5\n"
         list_of_lines[277] = "writer.filename = output/frontsurfFiles/" + fileNamePrefix + "-frontsurf.h5\n"
@@ -95,9 +107,13 @@ class FileModifier(object):
             list_of_lines[212] = "db_initial.filename = spatialdb/prescribed_traction_initial_withWall_newload_grid1.spatialdb\n"
         elif NULoad == 2:
             list_of_lines[212] = "db_initial.filename = spatialdb/prescribed_traction_initial_withWall_newload_grid2.spatialdb\n"
+        elif NULoad == 3:
+            list_of_lines[212] = "db_initial.filename = spatialdb/prescribed_traction_initial_withWall_newload_grid3.spatialdb\n"
+        elif NULoad == 4:
+            list_of_lines[212] = "db_initial.filename = spatialdb/prescribed_traction_initial_withWall_newload_grid4.spatialdb\n"
         else:
             print("NUload not available, you're fucked!\n")
-            
+
         mainCFGw = open("UsualSampleVSFH_withWall_Dirichlet.cfg", 'w')
         mainCFGw.writelines(list_of_lines)
         # print(fileNamePrefix)
@@ -109,16 +125,25 @@ class FileModifier(object):
         list_of_lines = timeDBr.readlines()
         # print(list_of_lines)
         # Change load magnitude
-        list_of_lines[15] = "0.1e-4 " + str(Load / 10.) + "\n"
-        list_of_lines[16] = "0.14e-4 " + str(Load / 10.) + "\n"
-        list_of_lines[17] = "0.16e-4 " + str(0.0) + "\n"
+        # list_of_lines[14] = str(0.09e-4 + rest / 1.0e6) + "  " + str(0.0) + "\n"
+        # list_of_lines[15] = str(0.1e-4 + rest / 1.0e6) + "  "  + str(Load / 10.) + "\n"
+        list_of_lines[14] = str(0.08e-4) + "  " + str(0.0) + "\n"
+        list_of_lines[15] = str(0.1e-4) + "  "  + str(Load / 10.) + "\n"
+        list_of_lines[16] = str(0.1e-4 + rest / 1.0e6) + "  " + str(Load / 10.) + "\n"
+        list_of_lines[17] = str(0.12e-4 + rest / 1.0e6) + "  " + str(0.0) + "\n"
+        # list_of_lines[16] = str(0.14e-4 + rest / 1.0e6) + "  " + str(Load / 10.) + "\n"
+        # list_of_lines[17] = str(0.16e-4 + rest / 1.0e6) + "  " + str(0.0) + "\n"
+        list_of_lines[18] = str((duration + rest) / 1.0e6) + "  " + str(0.0) + "\n"
         timeDBw = open("spatialdb/perturbation_cycle.timedb", 'w')
         timeDBw.writelines(list_of_lines)
         timeDBr.close()
         timeDBw.close()
 
         ## Modify rateStateProps
-        fricDBr = open("spatialdb/rateStateProps_withWall_NP.spatialdb", 'r')
+        if NPOP == 0:
+            fricDBr = open("spatialdb/rateStateProps_withWall.spatialdb", 'r')
+        elif NPOP == 1:
+            fricDBr = open("spatialdb/rateStateProps_withWall_3_8.spatialdb", 'r')
         list_of_lines = fricDBr.readlines()
         
         list_of_lines[50] = " 0.006354  0.003522 -0.003800     0.58  1e-6   " + str(float(DRS) * 1e-6)+ "  " + str(A) + "  " + str(B) + "  0.0  " + str(fw) + "  " + str(Vw) + "\n"
@@ -135,7 +160,12 @@ class FileModifier(object):
                 counter = counter + 1
         
         # Write files
-        fricDBw = open("spatialdb/rateStateProps_withWall_NP.spatialdb", 'w')
+        ## Modify rateStateProps
+        if NPOP == 0:
+            fricDBw = open("spatialdb/rateStateProps_withWall.spatialdb", 'w')
+        elif NPOP == 1:
+            fricDBw = open("spatialdb/rateStateProps_withWall_3_8.spatialdb", 'w')
+
         fricDBw.writelines(list_of_lines)
         fricDBr.close()
         fricDBw.close()
